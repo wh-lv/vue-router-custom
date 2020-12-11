@@ -11,6 +11,45 @@ let Vue;
 class VueRouter {
     constructor (options) {
         this.$options = options;
+        this.routesMap = {};
+        this.app = new Vue({
+            data: {
+                current: '/'
+            }
+        })
+    }
+
+    init () {
+        this.initEvents()
+        this.initRoutesMap(this.$options)
+        this.initView()
+    }
+    initEvents () {
+        window.addEventListener('load', this.onHashChange.bind(this), false)
+        window.addEventListener('hashchange', this.onHashChange.bind(this), false)
+    }
+    initRoutesMap (options) {
+        options.routes.forEach(item => {
+            this.routesMap[item.path] = item
+        })
+    }
+    initView () {
+        Vue.component('router-link', {
+            props: {
+                to: String
+            },
+            render (h) {
+                return h('a', { attrs: { href: '#' + this.to } }, this.$slots.default)
+            }
+        })
+        Vue.component('router-view', {
+            render: (h) => {
+                return h(this.routesMap[this.app.current].component)
+            }
+        })
+    }
+    onHashChange () {
+        this.app.current = window.location.hash.slice(1) || '/'
     }
     
 }
@@ -21,7 +60,8 @@ VueRouter.install = function (_Vue) {
     Vue.mixin({
         beforeCreate () {
             if (this.$options.router) {
-                this.$options.$router = this.$options.router
+                Vue.prototype.$router = this.$options.router
+                this.$options.router.init()
             }
         }
     })

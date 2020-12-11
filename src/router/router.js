@@ -21,7 +21,7 @@ class VueRouter {
 
     init () {
         this.initEvents()
-        this.initRoutesMap(this.$options)
+        this.initRoutesMap(this.$options) 
         this.initView()
     }
     initEvents () {

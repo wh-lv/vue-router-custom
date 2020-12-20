@@ -6,6 +6,14 @@
  * 4. 当前路由 current 为响应式，实现 router-view 的重新渲染
  */
 
+ /**
+ * vue-router源码实现
+ * 1. 解析 routes，生成 path 为 key，component 为 value的键值对对象
+ * 2. 创建全局组件 router-link：修改hash；router-view：加载当前匹配的组件
+ * 3. 监听 url 变化，将最新的 hash 赋值到 current 路由
+ * 4. current 必须为响应式的，能够重新渲染 router-view
+ */
+
 let Vue;
 
 class VueRouter {
